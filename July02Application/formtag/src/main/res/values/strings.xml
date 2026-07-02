@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">formtag</string>
+    <string name="contact_header">연락처 추가</string>
+    <string name="contact_subtitle">설명 또는 번호 입력</string>
+</resources>
