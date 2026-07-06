@@ -1,0 +1,17 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.ProjectApplication" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/water_blue_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/water_blue</item>
+        <item name="colorOnPrimaryContainer">@color/white</item>
+        <item name="colorSecondaryContainer">@color/water_bg</item>
+        <item name="colorOnSecondaryContainer">@color/text_primary</item>
+        <item name="colorSurface">@color/white</item>
+        <item name="colorSurfaceVariant">@color/water_bg</item>
+        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
+        <item name="colorOutline">@color/track_grey</item>
+        <item name="materialButtonStyle">@style/Widget.WaterBuddy.Button</item>
+        <item name="bottomNavigationStyle">@style/Widget.WaterBuddy.BottomNavigationView</item>
+    </style>
+</resources>

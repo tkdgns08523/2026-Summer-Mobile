@@ -1,0 +1,45 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.ProjectApplication" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/water_blue_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/water_blue</item>
+        <item name="colorOnPrimaryContainer">@color/white</item>
+        <item name="colorSecondaryContainer">@color/water_bg</item>
+        <item name="colorOnSecondaryContainer">@color/text_primary</item>
+        <item name="colorSurface">@color/white</item>
+        <item name="colorSurfaceVariant">@color/water_bg</item>
+        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
+        <item name="colorOutline">@color/track_grey</item>
+        <item name="android:statusBarColor">@color/water_bg</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="materialButtonStyle">@style/Widget.WaterBuddy.Button</item>
+        <item name="bottomNavigationStyle">@style/Widget.WaterBuddy.BottomNavigationView</item>
+    </style>
+
+    <style name="Theme.ProjectApplication" parent="Base.Theme.ProjectApplication" />
+
+    <!-- 둥글고 그림자가 있는 필 형태 버튼 -->
+    <style name="Widget.WaterBuddy.Button" parent="Widget.Material3.Button">
+        <item name="cornerRadius">20dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="elevation">2dp</item>
+    </style>
+
+    <!-- 하단 네비게이션: 살짝 뜬 느낌의 라운드 + 알약형 활성 표시 -->
+    <style name="Widget.WaterBuddy.BottomNavigationView" parent="Widget.Material3.BottomNavigationView">
+        <item name="elevation">12dp</item>
+        <item name="itemIconTint">@color/bottom_nav_item_color</item>
+        <item name="itemTextColor">@color/bottom_nav_item_color</item>
+        <item name="itemActiveIndicatorStyle">@style/Widget.WaterBuddy.BottomNavigationView.ActiveIndicator</item>
+        <item name="labelVisibilityMode">labeled</item>
+    </style>
+
+    <style name="Widget.WaterBuddy.BottomNavigationView.ActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/water_bg</item>
+    </style>
+</resources>

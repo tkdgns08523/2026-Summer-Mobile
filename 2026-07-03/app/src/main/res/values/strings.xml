@@ -1,0 +1,141 @@
+<resources>
+    <string name="app_name">물친구</string>
+
+    <!-- 메인 -->
+    <string name="greeting">%s님, 오늘도 물 한잔!</string>
+    <string name="progress_format">%1$d / %2$d ml</string>
+    <string name="percent_format">%d%%</string>
+    <string name="goal_achieved">오늘 목표 달성! 🎉</string>
+    <string name="goal_reached_hint">오늘 목표를 달성해서 더 기록할 수 없어요. 내일 다시 채워주세요!</string>
+
+    <!-- 물 버튼 -->
+    <string name="drink_100">100ml</string>
+    <string name="drink_200">200ml</string>
+    <string name="drink_300">300ml</string>
+    <string name="drink_500">500ml</string>
+    <string name="drink_recorded">%dml 기록 완료!</string>
+
+    <!-- 하단 네비게이션 -->
+    <string name="nav_main">홈</string>
+    <string name="nav_stats">통계</string>
+    <string name="nav_stretch">스트레칭</string>
+    <string name="nav_ranking">랭킹</string>
+    <string name="nav_mypage">마이</string>
+    <string name="coming_soon">준비 중인 기능이에요</string>
+
+    <!-- 온보딩 -->
+    <string name="onboarding_title">물친구와 함께 시작해요</string>
+    <string name="onboarding_subtitle">몇 가지만 알려주시면 하루 목표 섭취량을 계산해드려요</string>
+    <string name="hint_nickname">닉네임</string>
+    <string name="hint_weight">체중 (kg)</string>
+    <string name="label_activity_level">활동량</string>
+    <string name="activity_low">적음</string>
+    <string name="activity_normal">보통</string>
+    <string name="activity_high">많음</string>
+    <string name="label_wake_time">기상 시간</string>
+    <string name="label_sleep_time">취침 시간</string>
+    <string name="hint_pet_name">펫 이름</string>
+    <string name="default_pet_name">삐약이</string>
+    <string name="goal_preview_format">예상 하루 목표: %d ml</string>
+    <string name="start_button">시작하기</string>
+    <string name="error_nickname_required">닉네임을 입력해주세요</string>
+    <string name="error_nickname_taken">이미 이 기기에서 사용 중인 닉네임이에요</string>
+    <string name="error_weight_invalid">올바른 체중을 입력해주세요</string>
+
+    <!-- 물 기록 히스토리 -->
+    <string name="history_title">오늘의 기록</string>
+    <string name="content_desc_back">뒤로 가기</string>
+    <string name="content_desc_delete">기록 삭제</string>
+    <string name="history_remaining_format">목표까지 %d ml 남았어요</string>
+    <string name="history_remaining_done">오늘 목표를 달성했어요! 🎉</string>
+    <string name="history_empty">아직 마신 기록이 없어요</string>
+    <string name="history_item_format">%1$dml</string>
+
+    <!-- 통계 -->
+    <string name="stats_title">통계</string>
+    <string name="stats_daily_title">일별 섭취량 (최근 7일)</string>
+    <string name="stats_weekly_title">주간 평균 섭취량 (최근 4주)</string>
+    <string name="stats_month_summary_title">이번 달 요약</string>
+    <string name="stats_achieved_days_format">이번 달 목표 달성일: %d일</string>
+    <string name="stats_average_format">이번 달 평균 섭취량: %dml</string>
+    <string name="stats_no_last_month_data">지난달 기록이 없어요</string>
+    <string name="stats_compare_up_format">지난달보다 %d%% 늘었어요 📈</string>
+    <string name="stats_compare_down_format">지난달보다 %d%% 줄었어요 📉</string>
+
+    <!-- 캐릭터 -->
+    <string name="character_title">캐릭터</string>
+    <string name="character_collection_title">펫 도감</string>
+    <string name="character_shop_title">아이템 상점</string>
+    <string name="character_level_mood_format">Lv.%1$d · 기분 %2$s</string>
+    <string name="coins_format">🪙 %d</string>
+    <string name="mood_happy">좋음 🙂</string>
+    <string name="mood_normal">보통 😐</string>
+    <string name="mood_sad">나쁨 🙁</string>
+    <string name="item_status_equipped">장착중</string>
+    <string name="item_status_owned">보유중</string>
+    <string name="item_status_price_format">%d코인</string>
+    <string name="item_purchased">아이템을 구매했어요!</string>
+    <string name="item_not_enough_coins">코인이 부족해요</string>
+
+    <!-- 스트레칭 -->
+    <string name="stretch_title">스트레칭</string>
+    <string name="stretch_subtitle_format">%1$s · %2$d초</string>
+    <string name="stretch_start_button">시작하기</string>
+    <string name="stretch_today_count_format">오늘 스트레칭 %d회 완료</string>
+
+    <!-- 랭킹 -->
+    <string name="ranking_title">랭킹</string>
+    <string name="ranking_rate_format">%d%%</string>
+    <string name="ranking_reward_banner">🏆 이번 주 1위! 눌러서 보상을 받아보세요</string>
+    <string name="ranking_reward_claimed">코인 %d개를 받았어요!</string>
+
+    <!-- 알림 설정 -->
+    <string name="alarm_title">알림 설정</string>
+    <string name="alarm_water_toggle_label">물 마시기 알림</string>
+    <string name="alarm_interval_label">알림 간격</string>
+    <string name="alarm_interval_30">30분</string>
+    <string name="alarm_interval_60">1시간</string>
+    <string name="alarm_interval_120">2시간</string>
+    <string name="alarm_active_range_label">알림 받는 시간대</string>
+    <string name="alarm_stretch_toggle_label">스트레칭 알림</string>
+    <string name="alarm_sound_label">알림 소리</string>
+    <string name="alarm_sound_default">기본</string>
+    <string name="alarm_sound_chime">차임벨</string>
+    <string name="alarm_sound_silent">무음</string>
+    <string name="alarm_dnd_toggle_label">방해금지 시간대 사용</string>
+    <string name="alarm_save_button">저장하기</string>
+    <string name="alarm_saved">알림 설정이 저장되었어요</string>
+    <string name="notification_channel_name">물친구 알림</string>
+    <string name="notification_water_title">물 마실 시간이에요! 💧</string>
+    <string name="notification_water_text">한 잔 마시고 펫에게 힘을 주세요</string>
+    <string name="notification_stretch_title">스트레칭 할 시간이에요! 🧘</string>
+    <string name="notification_stretch_text">잠깐 몸을 풀어볼까요?</string>
+
+    <!-- 마이페이지 -->
+    <string name="mypage_title">마이페이지</string>
+    <string name="mypage_profile_title">프로필</string>
+    <string name="mypage_goal_hint">하루 목표량 (ml)</string>
+    <string name="mypage_save_profile_button">저장하기</string>
+    <string name="mypage_invalid_input">입력값을 확인해주세요</string>
+    <string name="mypage_profile_saved">프로필이 저장되었어요</string>
+    <string name="mypage_stats_title">누적 통계</string>
+    <string name="mypage_total_water_format">💧 누적 섭취량: %dml</string>
+    <string name="mypage_streak_format">🔥 연속 목표 달성일: %d일</string>
+    <string name="mypage_pet_level_format">🐤 키운 펫 레벨: Lv.%d</string>
+    <string name="mypage_menu_title">바로가기</string>
+    <string name="mypage_go_alarm_setting">🔔  알림 설정</string>
+    <string name="mypage_go_character">🎨  캐릭터 꾸미기</string>
+    <string name="mypage_app_version_format">물친구 v%s</string>
+    <string name="mypage_account_section_title">계정 관리</string>
+    <string name="mypage_reset_data">이 계정 데이터 초기화</string>
+    <string name="mypage_reset_confirm_message">이 계정의 모든 기록과 캐릭터, 아이템이 삭제돼요. 다른 계정에는 영향이 없어요. 계속할까요?</string>
+    <string name="mypage_logout">로그아웃</string>
+    <string name="mypage_logout_confirm_message">로그아웃하면 계정 선택 화면으로 돌아가요. 기록은 유지돼요.</string>
+    <string name="mypage_confirm_yes">확인</string>
+    <string name="mypage_confirm_no">취소</string>
+
+    <!-- 로그인 -->
+    <string name="login_title">누구세요?</string>
+    <string name="login_subtitle">이 기기에 저장된 계정 중 하나를 선택해주세요</string>
+    <string name="login_create_account_button">새 계정 만들기</string>
+</resources>
