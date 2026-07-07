@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>WaterBuddy 벤치마킹 발표</title>
+<style>
+  @page { size: A4 landscape; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; background: #f0f0f0; }
+
+  .slide {
+    width: 297mm; height: 210mm;
+    background: white;
+    margin: 10px auto;
+    padding: 38px 50px;
+    page-break-after: always;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  }
+  .slide:last-child { page-break-after: avoid; }
+
+  /* 슬라이드 1 - 타이틀 */
+  .slide-title {
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center;
+    background: linear-gradient(135deg, #4FC3F7 0%, #0288D1 100%);
+    color: white;
+  }
+  .slide-title h1 { font-size: 52px; margin-bottom: 10px; letter-spacing: -1px; }
+  .slide-title .emoji { font-size: 80px; margin-bottom: 14px; }
+  .slide-title .subtitle { font-size: 22px; opacity: 0.92; margin-bottom: 36px; line-height: 1.6; }
+  .slide-title .bottom-tag {
+    display: inline-block; background: rgba(255,255,255,0.2);
+    padding: 10px 30px; border-radius: 30px; font-size: 16px;
+  }
+
+  /* 공통 */
+  .slide h2 {
+    font-size: 28px; color: #0288D1;
+    border-bottom: 3px solid #0288D1;
+    padding-bottom: 8px; margin-bottom: 22px;
+  }
+  .section-label {
+    font-size: 16px; font-weight: bold; color: #555;
+    margin-bottom: 10px; display: block;
+  }
+
+  .two-col { display: flex; gap: 30px; }
+  .two-col > div { flex: 1; }
+
+  /* 카드 그리드 */
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .card-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+
+  .card {
+    background: #f7fbff; border: 1px solid #e0ecf5;
+    border-radius: 10px; padding: 12px 14px;
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .card .icon { font-size: 26px; flex-shrink: 0; margin-top: 2px; }
+  .card .text { font-size: 13px; line-height: 1.5; }
+  .card .text strong { font-size: 14px; color: #0277BD; display: block; margin-bottom: 2px; }
+
+  /* VS 비교 카드 */
+  .vs-row {
+    display: flex; align-items: center; gap: 0;
+    background: #fafafa; border-radius: 12px;
+    margin-bottom: 8px; overflow: hidden;
+    border: 1px solid #e8e8e8;
+  }
+  .vs-left, .vs-right { flex: 1; padding: 10px 16px; font-size: 13px; }
+  .vs-left { background: #fff3e0; text-align: right; }
+  .vs-right { background: #e8f5e9; }
+  .vs-center {
+    width: 44px; flex-shrink: 0; text-align: center;
+    font-size: 18px; font-weight: bold; color: #0288D1;
+    background: white; padding: 8px 0;
+  }
+  .vs-label { font-size: 11px; color: #888; display: block; margin-bottom: 2px; }
+  .vs-val { font-weight: bold; }
+  .vs-val.orange { color: #E65100; }
+  .vs-val.green { color: #2E7D32; }
+
+  /* 진행 도넛 */
+  .status-strip {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;
+  }
+  .chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 5px 12px; border-radius: 20px;
+    font-size: 12px; font-weight: bold; color: white;
+  }
+  .chip-done { background: #43A047; }
+  .chip-wip { background: #FB8C00; }
+
+  .bottom-box {
+    position: absolute; bottom: 30px; left: 50px; right: 50px;
+    background: #E3F2FD; border-radius: 10px;
+    padding: 14px 20px; font-size: 14px; color: #1565C0;
+    text-align: center;
+  }
+
+  .footer {
+    position: absolute; bottom: 12px; right: 30px;
+    font-size: 11px; color: #bbb;
+  }
+
+  @media print {
+    body { background: white; }
+    .slide { box-shadow: none; margin: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== 슬라이드 1: 타이틀 ==================== -->
+<div class="slide slide-title">
+  <div class="emoji">🌱 ➜ 💧🐔</div>
+  <h1>물친구 (WaterBuddy)</h1>
+  <div class="subtitle">
+    벤치마킹 대상: <strong>Plant Nanny</strong> (Fourdesire)<br>
+    "물을 마시면 식물이 자라는 앱"에서 영감을 받아<br>
+    <strong>"물 + 스트레칭으로 펫을 키우는 앱"</strong>으로 재탄생
+  </div>
+  <div class="bottom-tag">모바일 프로그래밍 | 2026년 7월</div>
+</div>
+
+<!-- ==================== 슬라이드 2: 마음에 든 점 + 차별화 ==================== -->
+<div class="slide">
+  <h2>🌱 Plant Nanny의 매력 &amp; 💧 WaterBuddy의 차별화</h2>
+
+  <div class="two-col">
+    <div>
+      <span class="section-label">Plant Nanny에서 마음에 든 점</span>
+      <div class="card-grid">
+        <div class="card">
+          <div class="icon">🎮</div>
+          <div class="text"><strong>게이미피케이션</strong>물 마시기를 "식물 돌봄"으로 바꿔 꾸준한 사용을 유도하는 핵심 매력</div>
+        </div>
+        <div class="card">
+          <div class="icon">👆</div>
+          <div class="text"><strong>원터치 UI</strong>물방울 버튼 한 번이면 기록 끝. 복잡한 입력 과정이 전혀 없음</div>
+        </div>
+        <div class="card">
+          <div class="icon">🌿</div>
+          <div class="text"><strong>수집 요소</strong>50개 이상의 다양한 식물 수집으로 장기 사용 동기 부여</div>
+        </div>
+        <div class="card">
+          <div class="icon">📊</div>
+          <div class="text"><strong>시각적 통계</strong>월별 그래프로 기록 비교가 쉬워 자기 관리에 효과적</div>
+        </div>
+      </div>
+
+      <div style="background:#FFF8E1; border-radius:8px; padding:12px 16px; margin-top:14px; font-size:13px; border-left:4px solid #FFB300;">
+        <strong>핵심 인사이트:</strong> "건강 관리"라는 지루한 행위를<br>"캐릭터 돌봄"이라는 감성적 경험으로 바꾼 것이 성공 비결
+      </div>
+    </div>
+
+    <div>
+      <span class="section-label">WaterBuddy는 이렇게 차별화했습니다</span>
+
+      <div class="vs-row">
+        <div class="vs-left"><span class="vs-label">Plant Nanny</span><span class="vs-val orange">🌱 식물 키우기</span></div>
+        <div class="vs-center">→</div>
+        <div class="vs-right"><span class="vs-label">WaterBuddy</span><span class="vs-val green">🐔 펫 캐릭터 육성</span></div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-left"><span class="vs-label">Plant Nanny</span><span class="vs-val orange">💧 물 마시기만</span></div>
+        <div class="vs-center">→</div>
+        <div class="vs-right"><span class="vs-label">WaterBuddy</span><span class="vs-val green">💧+🤸 물 + 스트레칭 통합</span></div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-left"><span class="vs-label">Plant Nanny</span><span class="vs-val orange">소셜 기능 없음</span></div>
+        <div class="vs-center">→</div>
+        <div class="vs-right"><span class="vs-label">WaterBuddy</span><span class="vs-val green">🏆 랭킹 + 1위 보상</span></div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-left"><span class="vs-label">Plant Nanny</span><span class="vs-val orange">🪴 화분 선택</span></div>
+        <div class="vs-center">→</div>
+        <div class="vs-right"><span class="vs-label">WaterBuddy</span><span class="vs-val green">🎩 아이템 구매 &amp; 장착</span></div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-left"><span class="vs-label">Plant Nanny</span><span class="vs-val orange">🔔 물 알림만</span></div>
+        <div class="vs-center">→</div>
+        <div class="vs-right"><span class="vs-label">WaterBuddy</span><span class="vs-val green">🔔 물+스트레칭+방해금지 통합</span></div>
+      </div>
+
+      <div style="background:#E8F5E9; border-radius:8px; padding:12px 16px; margin-top:14px; font-size:13px; border-left:4px solid #43A047;">
+        <strong>한 줄 요약:</strong> Plant Nanny = "물 + 식물"<br>
+        WaterBuddy = <strong>"물 + 스트레칭 + 펫 + 꾸미기 + 경쟁"</strong>
+      </div>
+    </div>
+  </div>
+  <div class="footer">WaterBuddy 벤치마킹 발표 — 2/3</div>
+</div>
+
+<!-- ==================== 슬라이드 3: 구현 현황 ==================== -->
+<div class="slide">
+  <h2>📱 현재 구현 현황 &amp; 기술 스택</h2>
+
+  <div class="two-col">
+    <div>
+      <span class="section-label">10개 화면 구현 상태</span>
+      <div class="card-grid">
+        <div class="card">
+          <div class="icon">🚀</div>
+          <div class="text"><strong>스플래시 / 온보딩</strong>첫 실행 자동 분기, 체중 기반 목표량 자동 계산</div>
+        </div>
+        <div class="card">
+          <div class="icon">🏠</div>
+          <div class="text"><strong>메인 화면</strong>펫 5단계 성장(🥚→🐣→🐤→🐥→🐔), 원터치 물 기록</div>
+        </div>
+        <div class="card">
+          <div class="icon">📋</div>
+          <div class="text"><strong>물 기록 히스토리</strong>시간별 기록 목록, 개별 삭제, 남은 목표량 표시</div>
+        </div>
+        <div class="card">
+          <div class="icon">📈</div>
+          <div class="text"><strong>통계</strong>일간/주간/월간 막대 차트, 전월 대비 비교 (자체 구현)</div>
+        </div>
+        <div class="card">
+          <div class="icon">🐔</div>
+          <div class="text"><strong>캐릭터 꾸미기</strong>아이템 상점, 코인으로 구매, 모자/액세서리 장착</div>
+        </div>
+        <div class="card">
+          <div class="icon">🤸</div>
+          <div class="text"><strong>스트레칭</strong>8종 동작 + 카운트다운 타이머, 완료 시 보상 지급</div>
+        </div>
+        <div class="card">
+          <div class="icon">🏆</div>
+          <div class="text"><strong>랭킹</strong>최근 7일 달성률 비교, 1위 코인 보상 (로컬)</div>
+        </div>
+        <div class="card">
+          <div class="icon">🔔</div>
+          <div class="text"><strong>알림 설정</strong>간격/시간대/방해금지 설정, Android 13+ 권한 처리</div>
+        </div>
+        <div class="card">
+          <div class="icon">👤</div>
+          <div class="text"><strong>마이페이지</strong>프로필 수정, 누적 통계, 데이터 초기화</div>
+        </div>
+        <div class="card">
+          <div class="icon">🔑</div>
+          <div class="text"><strong>로그인 (추가 구현)</strong>기획에 없던 로컬 멀티계정 전환 기능</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <span class="section-label">완성도</span>
+      <div class="status-strip">
+        <span class="chip chip-done">스플래시 ✔</span>
+        <span class="chip chip-done">온보딩 ✔</span>
+        <span class="chip chip-done">메인 ✔</span>
+        <span class="chip chip-done">물 기록 ✔</span>
+        <span class="chip chip-done">통계 ✔</span>
+        <span class="chip chip-done">캐릭터 ✔</span>
+        <span class="chip chip-done">스트레칭 ✔</span>
+        <span class="chip chip-wip">랭킹 90%</span>
+        <span class="chip chip-wip">알림 90%</span>
+        <span class="chip chip-done">마이페이지 ✔</span>
+        <span class="chip chip-done">로그인 ✔</span>
+      </div>
+
+      <span class="section-label" style="margin-top:18px;">기술 스택</span>
+      <div class="card-grid" style="grid-template-columns: 1fr 1fr;">
+        <div class="card" style="background:#f3e5f5; border-color:#ce93d8;">
+          <div class="icon">🔤</div>
+          <div class="text"><strong>Kotlin</strong>기획은 Java였으나 Kotlin으로 전환</div>
+        </div>
+        <div class="card" style="background:#e0f2f1; border-color:#80cbc4;">
+          <div class="icon">🗄️</div>
+          <div class="text"><strong>Room DB</strong>4개 Entity, 4개 DAO</div>
+        </div>
+        <div class="card" style="background:#fce4ec; border-color:#ef9a9a;">
+          <div class="icon">⚡</div>
+          <div class="text"><strong>Coroutines + Flow</strong>비동기 처리 & 실시간 UI 갱신</div>
+        </div>
+        <div class="card" style="background:#fff3e0; border-color:#ffcc80;">
+          <div class="icon">🎨</div>
+          <div class="text"><strong>Canvas 커스텀 뷰</strong>외부 라이브러리 없이 차트 직접 구현</div>
+        </div>
+      </div>
+
+      <span class="section-label" style="margin-top:18px;">남은 작업</span>
+      <div style="background:#fafafa; border-radius:10px; padding:14px 18px; font-size:13px; line-height:1.8; border:1px solid #eee;">
+        ▸ 아이템 가격 정상화 (현재 테스트용 0원)<br>
+        ▸ 알림음 선택 실제 반영<br>
+        ▸ 달력 형태 달성 여부 뷰 추가<br>
+        ▸ 이모지 → 실제 캐릭터 이미지 교체 검토
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-box">
+    <strong>결론:</strong> Plant Nanny의 핵심 매력인 "게이미피케이션"을 계승하면서, 스트레칭 · 랭킹 · 아이템 꾸미기로 <strong>더 풍부한 동기부여 시스템</strong>을 구축했습니다.
+  </div>
+  <div class="footer">WaterBuddy 벤치마킹 발표 — 3/3</div>
+</div>
+
+</body>
+</html>
