@@ -1,8 +1,10 @@
 package kr.hnu.ice.projectapplication.adapter
 
+import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -40,7 +42,31 @@ class RankingAdapter(private val items: List<Friend>) :
             card.setCardBackgroundColor(
                 ContextCompat.getColor(
                     itemView.context,
-                    if (friend.isMe) R.color.water_bg else R.color.white
+                    if (friend.isMe) R.color.water_bg else R.color.surface_card
+                )
+            )
+
+            val medalColorRes = when (rank) {
+                1 -> R.color.gold
+                2 -> R.color.silver
+                3 -> R.color.bronze
+                else -> null
+            }
+            val badge = tvRank.parent as? FrameLayout
+            val badgeBg = GradientDrawable().apply {
+                shape = GradientDrawable.OVAL
+                setColor(
+                    ContextCompat.getColor(
+                        itemView.context,
+                        medalColorRes ?: R.color.water_bg
+                    )
+                )
+            }
+            badge?.background = badgeBg
+            tvRank.setTextColor(
+                ContextCompat.getColor(
+                    itemView.context,
+                    if (medalColorRes != null) R.color.white else R.color.water_blue_dark
                 )
             )
         }

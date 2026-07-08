@@ -12,6 +12,7 @@ data class WaterCharacter(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val userId: Long,         // 이 펫의 소유 계정(users.id) — 계정당 펫 1마리
     val name: String,
+    val species: Int = 0,     // 온보딩에서 선택한 펫 종류 (util.PetSpecies 참고)
     val level: Int = 1,
     val exp: Int = 0,
     val mood: Int = 100       // 기분 상태 0~100

@@ -13,7 +13,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginTop="8dp"
-        android:layout_marginStart="4dp"
+        android:layout_marginStart="12dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/content_desc_back"
         android:src="@drawable/ic_back"
@@ -36,6 +36,7 @@
         app:layout_constraintTop_toTopOf="@id/btnBack" />
 
     <ScrollView
+        android:id="@+id/scrollContent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:clipToPadding="false"
@@ -65,9 +66,10 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="0dp">
+                app:cardBackgroundColor="@color/surface_card"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -76,14 +78,10 @@
                     android:padding="18dp">
 
                     <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.WaterBuddy.TextField"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_nickname"
-                        app:boxBackgroundMode="outline"
-                        app:boxCornerRadiusBottomEnd="14dp"
-                        app:boxCornerRadiusBottomStart="14dp"
-                        app:boxCornerRadiusTopEnd="14dp"
-                        app:boxCornerRadiusTopStart="14dp">
+                        android:hint="@string/hint_nickname">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etNickname"
@@ -92,15 +90,11 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.WaterBuddy.TextField"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:hint="@string/hint_weight"
-                        app:boxBackgroundMode="outline"
-                        app:boxCornerRadiusBottomEnd="14dp"
-                        app:boxCornerRadiusBottomStart="14dp"
-                        app:boxCornerRadiusTopEnd="14dp"
-                        app:boxCornerRadiusTopStart="14dp">
+                        android:hint="@string/hint_weight">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etWeight"
@@ -113,7 +107,7 @@
                         android:id="@+id/radioGroupActivity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="14dp"
                         android:orientation="horizontal">
 
                         <RadioButton
@@ -143,15 +137,11 @@
                     </RadioGroup>
 
                     <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.WaterBuddy.TextField"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:hint="@string/mypage_goal_hint"
-                        app:boxBackgroundMode="outline"
-                        app:boxCornerRadiusBottomEnd="14dp"
-                        app:boxCornerRadiusBottomStart="14dp"
-                        app:boxCornerRadiusTopEnd="14dp"
-                        app:boxCornerRadiusTopStart="14dp">
+                        android:hint="@string/mypage_goal_hint">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etDailyGoal"
@@ -162,9 +152,11 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnSaveProfile"
+                        style="@style/Widget.WaterBuddy.Button"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
+                        android:minHeight="52dp"
+                        android:layout_marginTop="16dp"
                         android:text="@string/mypage_save_profile_button" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -183,9 +175,10 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="0dp">
+                app:cardBackgroundColor="@color/surface_warm"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -235,9 +228,10 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="0dp">
+                app:cardBackgroundColor="@color/surface_card"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -248,7 +242,10 @@
                         android:id="@+id/btnGoAlarmSetting"
                         style="@style/Widget.Material3.Button.TextButton"
                         android:layout_width="match_parent"
-                        android:layout_height="56dp"
+                        android:layout_height="wrap_content"
+                        android:minHeight="58dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
                         android:gravity="start|center_vertical"
                         android:text="@string/mypage_go_alarm_setting"
                         android:textColor="@color/text_primary" />
@@ -263,7 +260,10 @@
                         android:id="@+id/btnGoCharacter"
                         style="@style/Widget.Material3.Button.TextButton"
                         android:layout_width="match_parent"
-                        android:layout_height="56dp"
+                        android:layout_height="wrap_content"
+                        android:minHeight="58dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
                         android:gravity="start|center_vertical"
                         android:text="@string/mypage_go_character"
                         android:textColor="@color/text_primary" />
@@ -293,16 +293,18 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogout"
-                style="@style/Widget.Material3.Button.OutlinedButton"
+                style="@style/Widget.WaterBuddy.Button.Outlined"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="52dp"
                 android:text="@string/mypage_logout" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnResetData"
-                style="@style/Widget.Material3.Button.OutlinedButton"
+                style="@style/Widget.WaterBuddy.Button.Outlined"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="52dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/mypage_reset_data"
                 android:textColor="@color/danger_red"

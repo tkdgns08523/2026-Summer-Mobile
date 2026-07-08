@@ -12,6 +12,7 @@ import kr.hnu.ice.projectapplication.model.DrinkRecord
 import kr.hnu.ice.projectapplication.util.DateUtil
 
 class DrinkHistoryAdapter(
+    private val onEditClick: (DrinkRecord) -> Unit,
     private val onDeleteClick: (DrinkRecord) -> Unit
 ) : ListAdapter<DrinkRecord, DrinkHistoryAdapter.ViewHolder>(DIFF_CALLBACK) {
 
@@ -22,17 +23,19 @@ class DrinkHistoryAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position), onDeleteClick)
+        holder.bind(getItem(position), onEditClick, onDeleteClick)
     }
 
     class ViewHolder(itemView: android.view.View) : RecyclerView.ViewHolder(itemView) {
         private val tvAmount: TextView = itemView.findViewById(R.id.tvItemAmount)
         private val tvTime: TextView = itemView.findViewById(R.id.tvItemTime)
+        private val btnEdit: ImageButton = itemView.findViewById(R.id.btnEdit)
         private val btnDelete: ImageButton = itemView.findViewById(R.id.btnDelete)
 
-        fun bind(record: DrinkRecord, onDeleteClick: (DrinkRecord) -> Unit) {
+        fun bind(record: DrinkRecord, onEditClick: (DrinkRecord) -> Unit, onDeleteClick: (DrinkRecord) -> Unit) {
             tvAmount.text = itemView.context.getString(R.string.history_item_format, record.amount)
             tvTime.text = DateUtil.toTime(record.timestamp)
+            btnEdit.setOnClickListener { onEditClick(record) }
             btnDelete.setOnClickListener { onDeleteClick(record) }
         }
     }

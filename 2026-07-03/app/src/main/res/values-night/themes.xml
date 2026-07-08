@@ -5,13 +5,19 @@
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorPrimaryContainer">@color/water_blue</item>
         <item name="colorOnPrimaryContainer">@color/white</item>
+        <item name="colorSecondary">@color/accent_mint_dark</item>
         <item name="colorSecondaryContainer">@color/water_bg</item>
         <item name="colorOnSecondaryContainer">@color/text_primary</item>
-        <item name="colorSurface">@color/white</item>
+        <item name="colorSurface">@color/surface_card</item>
         <item name="colorSurfaceVariant">@color/water_bg</item>
         <item name="colorOnSurfaceVariant">@color/text_secondary</item>
         <item name="colorOutline">@color/track_grey</item>
+        <item name="android:statusBarColor">@color/water_bg</item>
+        <item name="android:windowLightStatusBar">true</item>
         <item name="materialButtonStyle">@style/Widget.WaterBuddy.Button</item>
         <item name="bottomNavigationStyle">@style/Widget.WaterBuddy.BottomNavigationView</item>
+        <item name="materialCardViewStyle">@style/Widget.WaterBuddy.Card</item>
+        <item name="textInputStyle">@style/Widget.WaterBuddy.TextField</item>
+        <item name="android:windowBackground">@color/water_bg</item>
     </style>
 </resources>

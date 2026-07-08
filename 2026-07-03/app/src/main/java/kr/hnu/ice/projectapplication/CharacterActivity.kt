@@ -1,6 +1,7 @@
 package kr.hnu.ice.projectapplication
 
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -18,7 +19,9 @@ import kr.hnu.ice.projectapplication.database.AppDatabase
 import kr.hnu.ice.projectapplication.model.Item
 import kr.hnu.ice.projectapplication.model.WaterCharacter
 import kr.hnu.ice.projectapplication.util.ItemCatalog
+import kr.hnu.ice.projectapplication.util.PetSpecies
 import kr.hnu.ice.projectapplication.util.PreferenceManager
+import kr.hnu.ice.projectapplication.util.parseColorOrNull
 
 class CharacterActivity : AppCompatActivity() {
 
@@ -28,9 +31,8 @@ class CharacterActivity : AppCompatActivity() {
     private val shopAdapter = ItemShopAdapter(onItemClick = { onItemClicked(it) })
 
     private lateinit var tvPetEmoji: TextView
-    private lateinit var tvPetHat: TextView
-    private lateinit var tvPetAccessory: TextView
-    private lateinit var tvPetBackground: TextView
+    private lateinit var vPetGlow: View
+    private lateinit var vPetBackgroundColor: View
     private lateinit var tvPetName: TextView
     private lateinit var tvPetLevel: TextView
     private lateinit var tvCoins: TextView
@@ -43,9 +45,8 @@ class CharacterActivity : AppCompatActivity() {
 
         findViewById<ImageButton>(R.id.btnBack).setOnClickListener { finish() }
         tvPetEmoji = findViewById(R.id.tvPetEmoji)
-        tvPetHat = findViewById(R.id.tvPetHat)
-        tvPetAccessory = findViewById(R.id.tvPetAccessory)
-        tvPetBackground = findViewById(R.id.tvPetBackground)
+        vPetGlow = findViewById(R.id.vPetGlow)
+        vPetBackgroundColor = findViewById(R.id.vPetBackgroundColor)
         tvPetName = findViewById(R.id.tvPetName)
         tvPetLevel = findViewById(R.id.tvPetLevel)
         tvCoins = findViewById(R.id.tvCoins)
@@ -53,7 +54,7 @@ class CharacterActivity : AppCompatActivity() {
         progressExp = findViewById(R.id.progressExp)
 
         findViewById<RecyclerView>(R.id.recyclerShop).apply {
-            layoutManager = GridLayoutManager(this@CharacterActivity, 3)
+            layoutManager = GridLayoutManager(this@CharacterActivity, 2)
             adapter = shopAdapter
         }
 
@@ -67,6 +68,8 @@ class CharacterActivity : AppCompatActivity() {
     }
 
     private suspend fun seedItemsIfNeeded() {
+        // 예전 버전에서 만들어진 모자/액세서리 아이템은 색상 hex로 해석할 수 없으니 정리한다.
+        db.itemDao().deleteLegacyNonBackgroundItems()
         if (db.itemDao().count(userId) == 0) {
             db.itemDao().insertAll(ItemCatalog.defaultItems(userId))
         }
@@ -88,27 +91,24 @@ class CharacterActivity : AppCompatActivity() {
     }
 
     private fun bindPet(pet: WaterCharacter, items: List<Item>) {
-        tvPetEmoji.text = petEmoji(pet.level)
+        tvPetEmoji.text = PetSpecies.emojiForLevel(pet.species, pet.level)
         tvPetName.text = pet.name
         tvPetLevel.text = getString(R.string.character_level_mood_format, pet.level, moodLabel(pet.mood))
         progressExp.progress = (pet.levelProgress * 100).toInt()
-        tvCollection.text = COLLECTION_STAGES.mapIndexed { index, emoji ->
-            if (pet.level >= COLLECTION_THRESHOLDS[index]) emoji else LOCKED_EMOJI
+        val stages = PetSpecies.collectionStages(pet.species)
+        val thresholds = PetSpecies.collectionThresholds()
+        tvCollection.text = stages.mapIndexed { index, emoji ->
+            if (pet.level >= thresholds[index]) emoji else LOCKED_EMOJI
         }.joinToString(" ")
 
-        val equipped = items.filter { it.isEquipped }
-        bindEquippedEmoji(tvPetHat, equipped.firstOrNull { it.type == ItemCatalog.TYPE_HAT })
-        bindEquippedEmoji(tvPetAccessory, equipped.firstOrNull { it.type == ItemCatalog.TYPE_ACCESSORY })
-        bindEquippedEmoji(tvPetBackground, equipped.firstOrNull { it.type == ItemCatalog.TYPE_BACKGROUND })
-    }
-
-    private fun bindEquippedEmoji(view: TextView, item: Item?) {
-        if (item == null) {
-            view.text = ""
-            view.visibility = android.view.View.GONE
+        val backgroundColor = items.firstOrNull { it.isEquipped }?.emoji?.let(::parseColorOrNull)
+        if (backgroundColor != null) {
+            vPetBackgroundColor.background.setTint(backgroundColor)
+            vPetBackgroundColor.visibility = View.VISIBLE
+            vPetGlow.visibility = View.GONE
         } else {
-            view.text = item.emoji
-            view.visibility = android.view.View.VISIBLE
+            vPetBackgroundColor.visibility = View.GONE
+            vPetGlow.visibility = View.VISIBLE
         }
     }
 
@@ -143,14 +143,6 @@ class CharacterActivity : AppCompatActivity() {
         }
     }
 
-    private fun petEmoji(level: Int): String = when {
-        level >= 15 -> "🐔"
-        level >= 10 -> "🐥"
-        level >= 6 -> "🐤"
-        level >= 3 -> "🐣"
-        else -> "🥚"
-    }
-
     private fun moodLabel(mood: Int): String = when {
         mood >= 70 -> getString(R.string.mood_happy)
         mood >= 40 -> getString(R.string.mood_normal)
@@ -158,8 +150,6 @@ class CharacterActivity : AppCompatActivity() {
     }
 
     companion object {
-        private val COLLECTION_STAGES = listOf("🥚", "🐣", "🐤", "🐥", "🐔")
-        private val COLLECTION_THRESHOLDS = listOf(1, 3, 6, 10, 15)
         private const val LOCKED_EMOJI = "❔"
     }
 }

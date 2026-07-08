@@ -42,9 +42,11 @@ class LoginActivity : AppCompatActivity() {
                 return@launch
             }
 
+            val accountsWithPets = accounts.map { user -> user to db.characterDao().getByUser(user.id) }
+
             findViewById<RecyclerView>(R.id.recyclerAccounts).apply {
                 layoutManager = LinearLayoutManager(this@LoginActivity)
-                adapter = AccountAdapter(accounts) { user -> login(user.id) }
+                adapter = AccountAdapter(accountsWithPets) { user -> login(user.id) }
             }
         }
     }

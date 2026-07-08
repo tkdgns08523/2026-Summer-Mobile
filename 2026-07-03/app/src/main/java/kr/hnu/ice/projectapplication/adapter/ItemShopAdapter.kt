@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import kr.hnu.ice.projectapplication.R
 import kr.hnu.ice.projectapplication.model.Item
+import kr.hnu.ice.projectapplication.util.parseColorOrNull
 
 class ItemShopAdapter(
     private val onItemClick: (Item) -> Unit
@@ -25,13 +26,13 @@ class ItemShopAdapter(
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvEmoji: TextView = itemView.findViewById(R.id.tvItemEmoji)
+        private val vColorSwatch: View = itemView.findViewById(R.id.vItemColorSwatch)
         private val tvName: TextView = itemView.findViewById(R.id.tvItemName)
         private val tvStatus: TextView = itemView.findViewById(R.id.tvItemStatus)
 
         fun bind(item: Item, onItemClick: (Item) -> Unit) {
             val context = itemView.context
-            tvEmoji.text = item.emoji
+            parseColorOrNull(item.emoji)?.let { vColorSwatch.background.setTint(it) }
             tvName.text = item.name
             tvStatus.text = when {
                 item.isEquipped -> context.getString(R.string.item_status_equipped)

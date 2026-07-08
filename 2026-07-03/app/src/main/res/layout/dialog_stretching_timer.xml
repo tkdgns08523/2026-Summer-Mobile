@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialog_card"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="24dp">
+    android:padding="28dp">
 
     <TextView
         android:id="@+id/tvDialogEmoji"
@@ -19,9 +20,9 @@
         android:id="@+id/tvDialogTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         android:textColor="@color/text_primary"
-        android:textSize="18sp"
+        android:textSize="19sp"
         android:textStyle="bold"
         tools:text="목 좌우 늘리기" />
 
@@ -39,18 +40,28 @@
         android:id="@+id/tvDialogTimer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="18dp"
         android:textColor="@color/water_blue_dark"
-        android:textSize="40sp"
+        android:textSize="44sp"
         android:textStyle="bold"
         tools:text="20" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnDialogStart"
+        style="@style/Widget.WaterBuddy.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="52dp"
         android:layout_marginTop="20dp"
-        android:text="@string/stretch_start_button"
-        app:cornerRadius="16dp" />
+        android:text="@string/stretch_start_button" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnDialogCancel"
+        style="@style/Widget.WaterBuddy.Button.Text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/stretch_cancel_button" />
 
 </LinearLayout>

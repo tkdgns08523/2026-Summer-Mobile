@@ -4,10 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.RadioGroup
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
@@ -36,6 +39,20 @@ class MyPageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mypage)
+
+        val scrollContent = findViewById<ScrollView>(R.id.scrollContent)
+        val scrollBasePadding = scrollContent.paddingBottom
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.myPageRoot)) { v, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(v.paddingLeft, bars.top, v.paddingRight, v.paddingBottom)
+            scrollContent.setPadding(
+                scrollContent.paddingLeft,
+                scrollContent.paddingTop,
+                scrollContent.paddingRight,
+                scrollBasePadding + bars.bottom
+            )
+            insets
+        }
 
         findViewById<ImageButton>(R.id.btnBack).setOnClickListener { finish() }
         bindViews()

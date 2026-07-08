@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import kr.hnu.ice.projectapplication.model.DrinkRecord
 
@@ -12,6 +13,9 @@ interface DrinkRecordDao {
 
     @Insert
     suspend fun insert(record: DrinkRecord): Long
+
+    @Update
+    suspend fun update(record: DrinkRecord)
 
     @Delete
     suspend fun delete(record: DrinkRecord)

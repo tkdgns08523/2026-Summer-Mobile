@@ -1,12 +1,15 @@
 <resources>
     <string name="app_name">물친구</string>
+    <string name="splash_tagline">매일 마시는 물 한 잔, 함께 키우는 습관</string>
 
     <!-- 메인 -->
     <string name="greeting">%s님, 오늘도 물 한잔!</string>
     <string name="progress_format">%1$d / %2$d ml</string>
     <string name="percent_format">%d%%</string>
     <string name="goal_achieved">오늘 목표 달성! 🎉</string>
+    <string name="main_drink_section_label">물 마시기</string>
     <string name="goal_reached_hint">오늘 목표를 달성해서 더 기록할 수 없어요. 내일 다시 채워주세요!</string>
+    <string name="goal_already_achieved_alert">오늘 목표를 이미 다 마셨어요! 💧 내일 다시 채워주세요</string>
 
     <!-- 물 버튼 -->
     <string name="drink_100">100ml</string>
@@ -14,6 +17,11 @@
     <string name="drink_300">300ml</string>
     <string name="drink_500">500ml</string>
     <string name="drink_recorded">%dml 기록 완료!</string>
+    <string name="drink_custom_button">직접 입력하기</string>
+    <string name="drink_custom_title">직접 입력</string>
+    <string name="drink_custom_hint">섭취량 (ml)</string>
+    <string name="drink_custom_confirm">기록하기</string>
+    <string name="drink_custom_invalid">올바른 섭취량을 입력해주세요</string>
 
     <!-- 하단 네비게이션 -->
     <string name="nav_main">홈</string>
@@ -34,6 +42,10 @@
     <string name="activity_high">많음</string>
     <string name="label_wake_time">기상 시간</string>
     <string name="label_sleep_time">취침 시간</string>
+    <string name="label_pet_species">함께할 펫 선택</string>
+    <string name="pet_species_chick">🥚 병아리</string>
+    <string name="pet_species_puppy">🐶 강아지</string>
+    <string name="pet_species_kitten">🐱 고양이</string>
     <string name="hint_pet_name">펫 이름</string>
     <string name="default_pet_name">삐약이</string>
     <string name="goal_preview_format">예상 하루 목표: %d ml</string>
@@ -44,12 +56,31 @@
 
     <!-- 물 기록 히스토리 -->
     <string name="history_title">오늘의 기록</string>
+    <string name="history_title_format">%s 기록</string>
+    <string name="history_records_label">기록</string>
     <string name="content_desc_back">뒤로 가기</string>
     <string name="content_desc_delete">기록 삭제</string>
+    <string name="content_desc_edit">기록 수정</string>
+    <string name="content_desc_prev_month">이전 달</string>
+    <string name="content_desc_next_month">다음 달</string>
     <string name="history_remaining_format">목표까지 %d ml 남았어요</string>
-    <string name="history_remaining_done">오늘 목표를 달성했어요! 🎉</string>
+    <string name="history_remaining_done">목표를 달성했어요! 🎉</string>
     <string name="history_empty">아직 마신 기록이 없어요</string>
     <string name="history_item_format">%1$dml</string>
+    <string name="history_edit_title">기록 수정</string>
+    <string name="history_edit_hint">섭취량 (ml)</string>
+    <string name="history_edit_confirm">수정</string>
+    <string name="history_edit_invalid">올바른 섭취량을 입력해주세요</string>
+
+    <string-array name="calendar_weekdays">
+        <item>일</item>
+        <item>월</item>
+        <item>화</item>
+        <item>수</item>
+        <item>목</item>
+        <item>금</item>
+        <item>토</item>
+    </string-array>
 
     <!-- 통계 -->
     <string name="stats_title">통계</string>
@@ -81,6 +112,7 @@
     <string name="stretch_title">스트레칭</string>
     <string name="stretch_subtitle_format">%1$s · %2$d초</string>
     <string name="stretch_start_button">시작하기</string>
+    <string name="stretch_cancel_button">취소</string>
     <string name="stretch_today_count_format">오늘 스트레칭 %d회 완료</string>
 
     <!-- 랭킹 -->

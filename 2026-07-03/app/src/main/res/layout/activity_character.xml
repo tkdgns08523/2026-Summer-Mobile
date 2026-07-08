@@ -13,7 +13,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginTop="8dp"
-        android:layout_marginStart="4dp"
+        android:layout_marginStart="12dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/content_desc_back"
         android:src="@drawable/ic_back"
@@ -39,9 +39,12 @@
         android:id="@+id/tvCoins"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/bg_coin_pill"
+        android:paddingHorizontal="14dp"
+        android:paddingVertical="6dp"
         android:textColor="@color/water_blue_dark"
-        android:textSize="16sp"
+        android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/btnBack"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,110 +65,124 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="20dp">
+            android:paddingHorizontal="20dp"
+            android:paddingTop="8dp">
 
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:orientation="vertical">
+                app:cardBackgroundColor="@color/surface_card"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="0dp">
 
-                <FrameLayout
-                    android:id="@+id/petDisplayContainer"
-                    android:layout_width="180dp"
-                    android:layout_height="180dp">
-
-                    <TextView
-                        android:id="@+id/tvPetBackground"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:alpha="0.35"
-                        android:gravity="center"
-                        android:textSize="140sp"
-                        android:visibility="gone"
-                        tools:text="🌈"
-                        tools:visibility="visible" />
-
-                    <!-- 펫과 모자/액세서리가 같은 위치에 겹쳐서 실제로 "착용한" 것처럼 보이게 한다 -->
-                    <TextView
-                        android:id="@+id/tvPetEmoji"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:textSize="92sp"
-                        tools:text="🐤" />
-
-                    <TextView
-                        android:id="@+id/tvPetAccessory"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:textSize="30sp"
-                        android:translationY="-8dp"
-                        tools:text="🕶️" />
-
-                    <TextView
-                        android:id="@+id/tvPetHat"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal|top"
-                        android:layout_marginTop="10dp"
-                        android:textSize="36sp"
-                        tools:text="👒" />
-                </FrameLayout>
-
-                <TextView
-                    android:id="@+id/tvPetName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/text_primary"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    tools:text="삐약이" />
-
-                <TextView
-                    android:id="@+id/tvPetLevel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="14sp"
-                    tools:text="Lv.3 · 기분 좋음 🙂" />
-
-                <ProgressBar
-                    android:id="@+id/progressExp"
-                    style="?android:attr/progressBarStyleHorizontal"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:max="100"
-                    android:progressTint="@color/water_blue"
-                    tools:progress="40" />
-            </LinearLayout>
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <FrameLayout
+                        android:id="@+id/petDisplayContainer"
+                        android:layout_width="180dp"
+                        android:layout_height="180dp">
+
+                        <!-- 배경 색상을 고르지 않았을 때만 보이는 기본 은은한 글로우 -->
+                        <View
+                            android:id="@+id/vPetGlow"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/bg_ring_glow" />
+
+                        <!-- 고른 배경 색으로 채워지는 원형 뷰 (코드에서 색을 입힌다) -->
+                        <View
+                            android:id="@+id/vPetBackgroundColor"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/bg_pet_color_fill"
+                            android:alpha="0.28"
+                            android:visibility="gone"
+                            tools:visibility="visible" />
+
+                        <TextView
+                            android:id="@+id/tvPetEmoji"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:textSize="92sp"
+                            tools:text="🐤" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/tvPetName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:textColor="@color/text_primary"
+                        android:textSize="19sp"
+                        android:textStyle="bold"
+                        tools:text="삐약이" />
+
+                    <TextView
+                        android:id="@+id/tvPetLevel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp"
+                        tools:text="Lv.3 · 기분 좋음 🙂" />
+
+                    <ProgressBar
+                        android:id="@+id/progressExp"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        android:layout_marginTop="12dp"
+                        android:max="100"
+                        android:progressDrawable="@drawable/progress_exp_bar"
+                        tools:progress="40" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/surface_warm"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/character_collection_title"
+                        android:textColor="@color/text_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvCollection"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textSize="32sp"
+                        tools:text="🥚 🐣 🐤 🐥 🐔" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="@string/character_collection_title"
-                android:textColor="@color/text_primary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvCollection"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textSize="32sp"
-                tools:text="🥚 🐣 🐤 🐥 🐔" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginBottom="4dp"
                 android:text="@string/character_shop_title"
                 android:textColor="@color/text_primary"
                 android:textSize="16sp"

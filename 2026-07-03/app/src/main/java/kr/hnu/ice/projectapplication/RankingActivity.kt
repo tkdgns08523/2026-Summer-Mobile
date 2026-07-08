@@ -13,13 +13,15 @@ import kr.hnu.ice.projectapplication.adapter.RankingAdapter
 import kr.hnu.ice.projectapplication.database.AppDatabase
 import kr.hnu.ice.projectapplication.model.Friend
 import kr.hnu.ice.projectapplication.util.DateUtil
+import kr.hnu.ice.projectapplication.util.PetSpecies
 import kr.hnu.ice.projectapplication.util.PreferenceManager
+import kr.hnu.ice.projectapplication.util.RankingCatalog
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 /**
- * 서버가 없으므로, 실제 친구 대신 이 기기에 로컬로 저장된 모든 계정을 랭킹으로 보여준다.
+ * 서버가 없으므로, 이 기기에 로컬로 저장된 모든 계정 + 목업 친구 데이터(RankingCatalog)를 함께 랭킹으로 보여준다.
  * 현재 로그인한 계정도 다른 계정들과 함께 표시된다.
  */
 class RankingActivity : AppCompatActivity() {
@@ -48,18 +50,20 @@ class RankingActivity : AppCompatActivity() {
     private fun loadRanking() {
         lifecycleScope.launch {
             val accounts = db.userDao().getAll()
-            val friends = accounts.map { user ->
+            val realFriends = accounts.map { user ->
                 val rate = calculateWeeklyRate(user.id, user.dailyGoal)
                 val pet = db.characterDao().getByUser(user.id)
                 Friend(
                     nickname = user.nickname,
-                    petEmoji = petEmoji(pet?.level ?: 1),
+                    petEmoji = PetSpecies.emojiForLevel(pet?.species ?: PetSpecies.CHICK, pet?.level ?: 1),
                     achievementRate = rate,
                     isMe = user.id == prefs.activeUserId
                 )
             }
 
-            val sorted = friends.sortedByDescending { it.achievementRate }
+            // 서버가 없으므로 목업 친구 데이터를 함께 섞어 랭킹 화면을 채운다.
+            val allFriends = realFriends + RankingCatalog.mockFriends()
+            val sorted = allFriends.sortedByDescending { it.achievementRate }
             recycler.adapter = RankingAdapter(sorted)
 
             showRewardBannerIfTop(sorted)
@@ -79,14 +83,6 @@ class RankingActivity : AppCompatActivity() {
             sumPercent += (total * 100 / goal).coerceIn(0, 100)
         }
         return sumPercent / 7
-    }
-
-    private fun petEmoji(level: Int): String = when {
-        level >= 15 -> "🐔"
-        level >= 10 -> "🐥"
-        level >= 6 -> "🐤"
-        level >= 3 -> "🐣"
-        else -> "🥚"
     }
 
     private fun showRewardBannerIfTop(sorted: List<Friend>) {

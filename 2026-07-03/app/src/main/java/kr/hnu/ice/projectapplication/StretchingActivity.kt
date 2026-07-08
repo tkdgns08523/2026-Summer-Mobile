@@ -52,15 +52,18 @@ class StretchingActivity : AppCompatActivity() {
         val tvDescription = dialog.findViewById<TextView>(R.id.tvDialogDescription)
         val tvTimer = dialog.findViewById<TextView>(R.id.tvDialogTimer)
         val btnStart = dialog.findViewById<MaterialButton>(R.id.btnDialogStart)
+        val btnCancel = dialog.findViewById<MaterialButton>(R.id.btnDialogCancel)
 
         tvEmoji.text = stretching.emoji
         tvTitle.text = stretching.title
         tvDescription.text = stretching.description
         tvTimer.text = stretching.durationSeconds.toString()
 
+        var countDownTimer: CountDownTimer? = null
+
         btnStart.setOnClickListener {
             btnStart.isEnabled = false
-            object : CountDownTimer(stretching.durationSeconds * 1000L, 1000L) {
+            countDownTimer = object : CountDownTimer(stretching.durationSeconds * 1000L, 1000L) {
                 override fun onTick(millisUntilFinished: Long) {
                     tvTimer.text = (millisUntilFinished / 1000 + 1).toString()
                 }
@@ -70,8 +73,15 @@ class StretchingActivity : AppCompatActivity() {
                     completeStretch(stretching)
                     dialog.dismiss()
                 }
-            }.start()
+            }.also { it.start() }
         }
+
+        btnCancel.setOnClickListener {
+            countDownTimer?.cancel()
+            dialog.dismiss()
+        }
+
+        dialog.setOnDismissListener { countDownTimer?.cancel() }
 
         dialog.show()
     }

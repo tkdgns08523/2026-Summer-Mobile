@@ -31,4 +31,8 @@ interface ItemDao {
 
     @Query("DELETE FROM items WHERE userId = :userId")
     suspend fun clear(userId: Long)
+
+    /** 예전 모자/액세서리/배경 아이템(emoji 필드가 색상 hex가 아님)을 정리한다. */
+    @Query("DELETE FROM items WHERE emoji NOT LIKE '#%'")
+    suspend fun deleteLegacyNonBackgroundItems()
 }

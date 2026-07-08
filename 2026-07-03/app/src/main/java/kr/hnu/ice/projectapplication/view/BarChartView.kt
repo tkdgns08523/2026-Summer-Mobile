@@ -38,7 +38,7 @@ class BarChartView @JvmOverloads constructor(
     }
     private val valuePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = ContextCompat.getColor(context, R.color.text_primary)
-        textSize = 24f
+        textSize = 22f
         textAlign = Paint.Align.CENTER
     }
 
@@ -55,7 +55,7 @@ class BarChartView @JvmOverloads constructor(
 
         val maxValue = (values.maxOrNull() ?: 0f).coerceAtLeast(goalLine).coerceAtLeast(1f)
         val chartBottom = height - 60f
-        val chartTop = 20f
+        val chartTop = 44f
         val chartHeight = chartBottom - chartTop
         val barCount = values.size
         val slotWidth = width.toFloat() / barCount
@@ -75,7 +75,8 @@ class BarChartView @JvmOverloads constructor(
                 8f, 8f, barPaint
             )
             if (value > 0f) {
-                canvas.drawText(value.toInt().toString(), centerX, top - 10f, valuePaint)
+                val labelY = (top - 12f).coerceAtLeast(valuePaint.textSize)
+                canvas.drawText(value.toInt().toString(), centerX, labelY, valuePaint)
             }
             labels.getOrNull(index)?.let { label ->
                 canvas.drawText(label, centerX, height.toFloat() - 10f, labelPaint)

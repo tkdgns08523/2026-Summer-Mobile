@@ -7,9 +7,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kr.hnu.ice.projectapplication.R
 import kr.hnu.ice.projectapplication.model.User
+import kr.hnu.ice.projectapplication.model.WaterCharacter
+import kr.hnu.ice.projectapplication.util.PetSpecies
 
 class AccountAdapter(
-    private val accounts: List<User>,
+    private val accounts: List<Pair<User, WaterCharacter?>>,
     private val onAccountClick: (User) -> Unit
 ) : RecyclerView.Adapter<AccountAdapter.ViewHolder>() {
 
@@ -20,15 +22,22 @@ class AccountAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(accounts[position], onAccountClick)
+        val (user, pet) = accounts[position]
+        holder.bind(user, pet, onAccountClick)
     }
 
     override fun getItemCount(): Int = accounts.size
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val tvEmoji: TextView = itemView.findViewById(R.id.tvAccountEmoji)
         private val tvNickname: TextView = itemView.findViewById(R.id.tvAccountNickname)
 
-        fun bind(user: User, onAccountClick: (User) -> Unit) {
+        fun bind(user: User, pet: WaterCharacter?, onAccountClick: (User) -> Unit) {
+            tvEmoji.text = if (pet != null) {
+                PetSpecies.emojiForLevel(pet.species, pet.level)
+            } else {
+                PetSpecies.emojiForLevel(PetSpecies.CHICK, 1)
+            }
             tvNickname.text = user.nickname
             itemView.setOnClickListener { onAccountClick(user) }
         }

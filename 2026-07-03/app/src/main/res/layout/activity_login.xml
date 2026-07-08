@@ -6,26 +6,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/water_bg"
+    android:paddingHorizontal="24dp"
     tools:context=".LoginActivity">
+
+    <TextView
+        android:id="@+id/tvLoginEmoji"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:text="💧"
+        android:textSize="44sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvLoginTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="14dp"
         android:text="@string/login_title"
         android:textColor="@color/text_primary"
-        android:textSize="22sp"
+        android:textSize="26sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/tvLoginEmoji" />
 
     <TextView
         android:id="@+id/tvLoginSubtitle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="6dp"
         android:text="@string/login_subtitle"
         android:textColor="@color/text_secondary"
         android:textSize="14sp"
@@ -37,9 +47,9 @@
         android:id="@+id/recyclerAccounts"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="24dp"
         android:clipToPadding="false"
-        android:paddingHorizontal="24dp"
+        android:paddingBottom="8dp"
         app:layout_constraintBottom_toTopOf="@id/btnCreateAccount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,11 +58,11 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCreateAccount"
-        style="@style/Widget.Material3.Button.OutlinedButton"
+        style="@style/Widget.WaterBuddy.Button.Outlined"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginBottom="32dp"
+        android:minHeight="56dp"
+        android:layout_marginBottom="28dp"
         android:text="@string/login_create_account_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

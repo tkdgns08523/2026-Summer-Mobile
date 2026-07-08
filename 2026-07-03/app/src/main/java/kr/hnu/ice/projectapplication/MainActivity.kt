@@ -2,9 +2,14 @@ package kr.hnu.ice.projectapplication
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
+import android.view.View
+import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -19,8 +24,9 @@ import kotlinx.coroutines.launch
 import kr.hnu.ice.projectapplication.database.AppDatabase
 import kr.hnu.ice.projectapplication.model.DrinkRecord
 import kr.hnu.ice.projectapplication.util.DateUtil
-import kr.hnu.ice.projectapplication.util.ItemCatalog
+import kr.hnu.ice.projectapplication.util.PetSpecies
 import kr.hnu.ice.projectapplication.util.PreferenceManager
+import kr.hnu.ice.projectapplication.util.parseColorOrNull
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,8 +35,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var tvGreeting: TextView
     private lateinit var tvPet: TextView
-    private lateinit var tvPetHat: TextView
-    private lateinit var tvPetAccessory: TextView
+    private lateinit var vPetGlow: View
+    private lateinit var vPetBackgroundColor: View
     private lateinit var tvPercent: TextView
     private lateinit var tvAmount: TextView
     private lateinit var tvGoalHint: TextView
@@ -38,6 +44,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var drinkButtons: List<MaterialButton>
 
     private var dailyGoal: Int = 2000
+    private var petSpecies: Int = PetSpecies.CHICK
+    private var currentPercent: Int = 0
     private val userId get() = prefs.activeUserId
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,37 +74,52 @@ class MainActivity : AppCompatActivity() {
         tvPet.setOnClickListener {
             startActivity(Intent(this, CharacterActivity::class.java))
         }
+        lifecycleScope.launch { db.itemDao().deleteLegacyNonBackgroundItems() }
         observeState()
-        observeEquippedItems()
+        observeBackgroundColor()
+        observePetSpecies()
     }
 
     private fun bindViews() {
         tvGreeting = findViewById(R.id.tvGreeting)
         tvPet = findViewById(R.id.tvPet)
-        tvPetHat = findViewById(R.id.tvPetHat)
-        tvPetAccessory = findViewById(R.id.tvPetAccessory)
+        vPetGlow = findViewById(R.id.vPetGlow)
+        vPetBackgroundColor = findViewById(R.id.vPetBackgroundColor)
         tvPercent = findViewById(R.id.tvPercent)
         tvAmount = findViewById(R.id.tvAmount)
         tvGoalHint = findViewById(R.id.tvGoalHint)
         progress = findViewById(R.id.progressWater)
     }
 
-    /** 캐릭터 화면에서 장착한 모자/액세서리를 홈 화면 펫에도 반영한다. */
-    private fun observeEquippedItems() {
+    /** 캐릭터 화면에서 고른 배경 색을 홈 화면 펫 뒤에도 반영한다. */
+    private fun observeBackgroundColor() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 db.itemDao().observeAll(userId).collect { items ->
-                    val equipped = items.filter { it.isEquipped }
-                    bindEquippedEmoji(tvPetHat, equipped.firstOrNull { it.type == ItemCatalog.TYPE_HAT }?.emoji)
-                    bindEquippedEmoji(tvPetAccessory, equipped.firstOrNull { it.type == ItemCatalog.TYPE_ACCESSORY }?.emoji)
+                    val backgroundColor = items.firstOrNull { it.isEquipped }?.emoji?.let(::parseColorOrNull)
+                    if (backgroundColor != null) {
+                        vPetBackgroundColor.background.setTint(backgroundColor)
+                        vPetBackgroundColor.visibility = View.VISIBLE
+                        vPetGlow.visibility = View.GONE
+                    } else {
+                        vPetBackgroundColor.visibility = View.GONE
+                        vPetGlow.visibility = View.VISIBLE
+                    }
                 }
             }
         }
     }
 
-    private fun bindEquippedEmoji(view: TextView, emoji: String?) {
-        view.text = emoji.orEmpty()
-        view.visibility = if (emoji == null) android.view.View.GONE else android.view.View.VISIBLE
+    /** 온보딩에서 고른 펫 종류에 맞춰 성장 이모지를 결정한다. */
+    private fun observePetSpecies() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                db.characterDao().observeByUser(userId).collect { pet ->
+                    petSpecies = pet?.species ?: PetSpecies.CHICK
+                    tvPet.text = petEmoji(currentPercent)
+                }
+            }
+        }
     }
 
     private fun setupButtons() {
@@ -110,6 +133,32 @@ class MainActivity : AppCompatActivity() {
         map.forEach { (id, amount) ->
             findViewById<MaterialButton>(id).setOnClickListener { recordDrink(amount) }
         }
+        findViewById<MaterialButton>(R.id.btnCustomAmount).setOnClickListener { showCustomAmountDialog() }
+    }
+
+    private fun showCustomAmountDialog() {
+        val input = EditText(this).apply {
+            inputType = InputType.TYPE_CLASS_NUMBER
+            hint = getString(R.string.drink_custom_hint)
+        }
+        val padding = (20 * resources.displayMetrics.density).toInt()
+        val container = FrameLayout(this).apply {
+            setPadding(padding, padding / 2, padding, 0)
+            addView(input)
+        }
+        AlertDialog.Builder(this)
+            .setTitle(R.string.drink_custom_title)
+            .setView(container)
+            .setPositiveButton(R.string.drink_custom_confirm) { _, _ ->
+                val amount = input.text.toString().toIntOrNull()
+                if (amount == null || amount <= 0) {
+                    Toast.makeText(this, R.string.drink_custom_invalid, Toast.LENGTH_SHORT).show()
+                } else {
+                    recordDrink(amount)
+                }
+            }
+            .setNegativeButton(R.string.mypage_confirm_no, null)
+            .show()
     }
 
     private fun setupBottomNav() {
@@ -161,29 +210,27 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateUi(total: Int) {
         val percent = if (dailyGoal > 0) (total * 100 / dailyGoal) else 0
-        progress.setProgressCompat(percent.coerceIn(0, 100), true)
+        currentPercent = percent.coerceIn(0, 100)
+        progress.setProgressCompat(currentPercent, true)
         tvPercent.text = getString(R.string.percent_format, percent)
         tvAmount.text = getString(R.string.progress_format, total, dailyGoal)
-        tvPet.text = petEmoji(percent)
+        tvPet.text = petEmoji(currentPercent)
 
         val achieved = total >= dailyGoal
         drinkButtons.forEach { it.isEnabled = !achieved }
         tvGoalHint.visibility = if (achieved) android.view.View.VISIBLE else android.view.View.GONE
     }
 
-    /** 진행률에 따라 펫 표정이 성장한다. */
-    private fun petEmoji(percent: Int): String = when {
-        percent >= 100 -> "🐔"
-        percent >= 75 -> "🐥"
-        percent >= 50 -> "🐤"
-        percent >= 25 -> "🐣"
-        else -> "🥚"
-    }
+    /** 진행률 + 온보딩에서 고른 펫 종류에 따라 펫 표정이 성장한다. */
+    private fun petEmoji(percent: Int): String = PetSpecies.emojiForPercent(petSpecies, percent)
 
     private fun recordDrink(amount: Int) {
         lifecycleScope.launch {
             val alreadyAchieved = db.drinkRecordDao().getTotalByDate(userId, DateUtil.today()) >= dailyGoal
-            if (alreadyAchieved) return@launch
+            if (alreadyAchieved) {
+                Toast.makeText(this@MainActivity, R.string.goal_already_achieved_alert, Toast.LENGTH_SHORT).show()
+                return@launch
+            }
 
             val now = System.currentTimeMillis()
             db.drinkRecordDao().insert(

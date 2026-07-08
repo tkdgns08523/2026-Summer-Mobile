@@ -11,7 +11,7 @@ import kr.hnu.ice.projectapplication.model.WaterCharacter
 
 @Database(
     entities = [User::class, DrinkRecord::class, WaterCharacter::class, Item::class],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

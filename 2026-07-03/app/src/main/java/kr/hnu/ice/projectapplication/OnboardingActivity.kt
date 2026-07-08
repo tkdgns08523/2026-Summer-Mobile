@@ -17,6 +17,7 @@ import kr.hnu.ice.projectapplication.database.AppDatabase
 import kr.hnu.ice.projectapplication.model.User
 import kr.hnu.ice.projectapplication.model.WaterCharacter
 import kr.hnu.ice.projectapplication.util.ItemCatalog
+import kr.hnu.ice.projectapplication.util.PetSpecies
 import kr.hnu.ice.projectapplication.util.PreferenceManager
 import kr.hnu.ice.projectapplication.util.WaterCalculator
 
@@ -29,6 +30,7 @@ class OnboardingActivity : AppCompatActivity() {
     private lateinit var etWeight: TextInputEditText
     private lateinit var etPetName: TextInputEditText
     private lateinit var radioGroupActivity: RadioGroup
+    private lateinit var radioGroupSpecies: RadioGroup
     private lateinit var btnWakeTime: MaterialButton
     private lateinit var btnSleepTime: MaterialButton
     private lateinit var tvGoalPreview: android.widget.TextView
@@ -59,6 +61,7 @@ class OnboardingActivity : AppCompatActivity() {
         etWeight = findViewById(R.id.etWeight)
         etPetName = findViewById(R.id.etPetName)
         radioGroupActivity = findViewById(R.id.radioGroupActivity)
+        radioGroupSpecies = findViewById(R.id.radioGroupSpecies)
         btnWakeTime = findViewById(R.id.btnWakeTime)
         btnSleepTime = findViewById(R.id.btnSleepTime)
         tvGoalPreview = findViewById(R.id.tvGoalPreview)
@@ -109,6 +112,12 @@ class OnboardingActivity : AppCompatActivity() {
         return radio?.tag?.toString()?.toIntOrNull() ?: WaterCalculator.ACTIVITY_NORMAL
     }
 
+    private fun selectedSpecies(): Int {
+        val checkedId = radioGroupSpecies.checkedRadioButtonId
+        val radio = findViewById<android.widget.RadioButton>(checkedId)
+        return radio?.tag?.toString()?.toIntOrNull() ?: PetSpecies.CHICK
+    }
+
     private fun formatTime(hour: Int, minute: Int): String = "%02d:%02d".format(hour, minute)
 
     private fun submit() {
@@ -148,7 +157,9 @@ class OnboardingActivity : AppCompatActivity() {
                     sleepTime = formatTime(sleepHour, sleepMinute)
                 )
             )
-            db.characterDao().insert(WaterCharacter(userId = newUserId, name = petName))
+            db.characterDao().insert(
+                WaterCharacter(userId = newUserId, name = petName, species = selectedSpecies())
+            )
             db.itemDao().insertAll(ItemCatalog.defaultItems(newUserId))
 
             prefs.activeUserId = newUserId
