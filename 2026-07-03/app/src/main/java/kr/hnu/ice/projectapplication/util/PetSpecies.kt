@@ -1,5 +1,7 @@
 package kr.hnu.ice.projectapplication.util
 
+import kr.hnu.ice.projectapplication.R
+
 /** 온보딩에서 선택 가능한 펫 종류별 성장 단계 이모지 */
 object PetSpecies {
     const val CHICK = 0
@@ -11,6 +13,15 @@ object PetSpecies {
         PUPPY to listOf("🐶", "🐕", "🐕", "🐕‍🦺", "🐩"),
         KITTEN to listOf("🐱", "😺", "🐈", "🐈", "🐈‍⬛")
     )
+
+    private val DEFAULT_NAME_RES = mapOf(
+        CHICK to R.string.default_pet_name_chick,
+        PUPPY to R.string.default_pet_name_puppy,
+        KITTEN to R.string.default_pet_name_kitten
+    )
+
+    /** 이름을 직접 입력하지 않았을 때 종별로 보여줄 기본 이름 */
+    fun defaultNameRes(species: Int): Int = DEFAULT_NAME_RES[species] ?: DEFAULT_NAME_RES.getValue(CHICK)
 
     private val LEVEL_THRESHOLDS = listOf(1, 3, 6, 10, 15)
 

@@ -135,9 +135,10 @@ class OnboardingActivity : AppCompatActivity() {
 
         val activityLevel = selectedActivityLevel()
         val goal = WaterCalculator.recommendDailyGoal(weight, activityLevel)
+        val species = selectedSpecies()
         val petName = etPetName.text?.toString()?.trim()
-            ?.ifEmpty { getString(R.string.default_pet_name) }
-            ?: getString(R.string.default_pet_name)
+            ?.ifEmpty { getString(PetSpecies.defaultNameRes(species)) }
+            ?: getString(PetSpecies.defaultNameRes(species))
 
         btnStart.isEnabled = false
         lifecycleScope.launch {
@@ -158,7 +159,7 @@ class OnboardingActivity : AppCompatActivity() {
                 )
             )
             db.characterDao().insert(
-                WaterCharacter(userId = newUserId, name = petName, species = selectedSpecies())
+                WaterCharacter(userId = newUserId, name = petName, species = species)
             )
             db.itemDao().insertAll(ItemCatalog.defaultItems(newUserId))
 

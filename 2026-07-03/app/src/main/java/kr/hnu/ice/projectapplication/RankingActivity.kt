@@ -5,6 +5,8 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -37,6 +39,11 @@ class RankingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ranking)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.rankingRoot)) { v, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(v.paddingLeft, bars.top, v.paddingRight, v.paddingBottom)
+            insets
+        }
 
         findViewById<ImageButton>(R.id.btnBack).setOnClickListener { finish() }
         recycler = findViewById<RecyclerView>(R.id.recyclerRanking).apply {
@@ -70,19 +77,21 @@ class RankingActivity : AppCompatActivity() {
         }
     }
 
-    /** 최근 7일 목표 달성률 평균(%) */
+    /** 이번 주(주 시작일~오늘) 목표 달성률 평균(%) — 새 주가 시작되면 자동으로 초기화된다. */
     private suspend fun calculateWeeklyRate(userId: Long, goal: Int): Int {
         val totalsByDate = db.drinkRecordDao().getDailyTotals(userId).associateBy({ it.date }, { it.total })
-        val calendar = Calendar.getInstance()
+        val today = Calendar.getInstance()
+        val daysSinceWeekStart = (today.get(Calendar.DAY_OF_WEEK) - today.firstDayOfWeek + 7) % 7
+
         var sumPercent = 0
-        for (i in 0..6) {
-            calendar.time = Calendar.getInstance().time
+        for (i in 0..daysSinceWeekStart) {
+            val calendar = Calendar.getInstance()
             calendar.add(Calendar.DAY_OF_YEAR, -i)
             val date = dateFormat.format(calendar.time)
             val total = totalsByDate[date] ?: 0
             sumPercent += (total * 100 / goal).coerceIn(0, 100)
         }
-        return sumPercent / 7
+        return sumPercent / (daysSinceWeekStart + 1)
     }
 
     private fun showRewardBannerIfTop(sorted: List<Friend>) {
