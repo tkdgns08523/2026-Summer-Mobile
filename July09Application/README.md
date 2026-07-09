@@ -6,3 +6,4 @@
 - 아이템 레이아웃의 높이 속성(`match_parent` vs `wrap_content`)이 리스트 아이템 크기에 미치는 영향을 학습
 - 어댑터의 데이터셋 변경(추가/삭제)을 `notifyItemInserted`/`notifyItemRemoved`로 반영해 리스트를 갱신하는 방법을 학습
 - `ViewPager2`와 `FragmentStateAdapter`를 연동해 여러 `Fragment`를 좌우 스와이프로 전환하는 화면 구성 방법을 학습
+- `DrawerLayout`을 이용해 본문 영역과 드로어(메뉴) 영역을 겹쳐서 배치하는 내비게이션 드로어 구조를 학습
