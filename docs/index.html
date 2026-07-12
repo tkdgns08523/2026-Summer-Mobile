@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WaterBuddy — 기획 대비 구현 발표</title>
+<style>
+  :root{
+    --sky:#3FA9E0;
+    --sky-soft:#DCF0FB;
+    --coral:#F0654A;
+    --coral-soft:#FCE3DD;
+    --mint:#2FAE93;
+    --mint-soft:#DBF3EC;
+    --lemon:#E0A72C;
+    --lavender:#8B7FD1;
+    --ink:#0E2233;
+    --ink-2:#31506A;
+    --paper:#F5FAFD;
+    --paper-2:#FFFFFF;
+    --line:#D3E6F0;
+    --shadow: 0 1px 2px rgba(14,34,51,.06), 0 8px 24px rgba(14,34,51,.06);
+    --font-display: -apple-system, "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+    --font-body: -apple-system, "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+    --font-mono: ui-monospace, "Cascadia Mono", "Consolas", monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --sky:#5CC0F2; --sky-soft:#123246; --coral:#FF8467; --coral-soft:#3A2119;
+      --mint:#4FCBAE; --mint-soft:#123A31; --lemon:#F2C05C; --lavender:#A99CE8;
+      --ink:#EAF3F8; --ink-2:#A9C4D6; --paper:#0B1C29; --paper-2:#102A3B; --line:#1E3D50;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --sky:#5CC0F2; --sky-soft:#123246; --coral:#FF8467; --coral-soft:#3A2119;
+    --mint:#4FCBAE; --mint-soft:#123A31; --lemon:#F2C05C; --lavender:#A99CE8;
+    --ink:#EAF3F8; --ink-2:#A9C4D6; --paper:#0B1C29; --paper-2:#102A3B; --line:#1E3D50;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px rgba(0,0,0,.35);
+  }
+  :root[data-theme="light"]{
+    --sky:#3FA9E0; --sky-soft:#DCF0FB; --coral:#F0654A; --coral-soft:#FCE3DD;
+    --mint:#2FAE93; --mint-soft:#DBF3EC; --lemon:#E0A72C; --lavender:#8B7FD1;
+    --ink:#0E2233; --ink-2:#31506A; --paper:#F5FAFD; --paper-2:#FFFFFF; --line:#D3E6F0;
+    --shadow: 0 1px 2px rgba(14,34,51,.06), 0 8px 24px rgba(14,34,51,.06);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:var(--font-body); line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{ font-family:var(--font-display); text-wrap:balance; color:var(--ink); }
+  a{color:var(--sky);}
+  ::selection{ background:var(--sky-soft); }
+
+  .wrap{ max-width:920px; margin:0 auto; padding:0 28px; }
+
+  /* ---------- progress rail (growth stages) ---------- */
+  .rail{
+    position:fixed; top:0; left:0; right:0; height:4px; z-index:50;
+    background:var(--line);
+  }
+  .rail-fill{
+    height:100%; width:0%;
+    background:linear-gradient(90deg, var(--sky), var(--mint));
+    transition:width .1s linear;
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    min-height:92vh; display:flex; flex-direction:column; justify-content:center;
+    position:relative; overflow:hidden;
+    background:
+      radial-gradient(600px 400px at 85% 8%, var(--sky-soft), transparent 60%),
+      radial-gradient(500px 350px at 10% 95%, var(--mint-soft), transparent 60%);
+  }
+  .eyebrow{
+    font-family:var(--font-mono); font-size:12.5px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--ink-2); display:flex; align-items:center; gap:10px; margin-bottom:22px;
+  }
+  .eyebrow .dot{ width:6px;height:6px;border-radius:50%; background:var(--coral); }
+  .hero h1{
+    font-size:clamp(34px, 5.6vw, 60px); line-height:1.08; letter-spacing:-.02em;
+    margin:0 0 20px;
+  }
+  .hero h1 .grow{
+    background:linear-gradient(90deg, var(--sky), var(--mint));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero p.lede{
+    font-size:18px; color:var(--ink-2); max-width:620px; margin:0 0 30px;
+  }
+  .stage-strip{
+    display:flex; gap:10px; align-items:center; font-size:26px;
+    margin-bottom:8px;
+  }
+  .stage-strip span.arrow{ font-family:var(--font-mono); font-size:14px; color:var(--ink-2); }
+  .stage-cap{ font-family:var(--font-mono); font-size:11.5px; color:var(--ink-2); letter-spacing:.05em; }
+
+  /* ---------- section shell ---------- */
+  section{ padding:86px 0; border-top:1px solid var(--line); }
+  section:first-of-type{ border-top:none; }
+  .kicker{
+    font-family:var(--font-mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--sky); margin-bottom:12px; font-weight:600;
+  }
+  h2.head{ font-size:clamp(24px,3.4vw,34px); margin:0 0 14px; letter-spacing:-.01em; }
+  .section-lede{ font-size:16px; color:var(--ink-2); max-width:680px; margin:0 0 40px; }
+
+  /* ---------- overview cards ---------- */
+  .ov-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+  .ov-card{
+    background:var(--paper-2); border:1px solid var(--line); border-radius:14px;
+    padding:20px 22px; box-shadow:var(--shadow);
+  }
+  .ov-card .ic{ font-size:22px; margin-bottom:10px; }
+  .ov-card h3{ font-size:15px; margin:0 0 6px; }
+  .ov-card p{ font-size:13.5px; color:var(--ink-2); margin:0; }
+
+  /* benchmark compare */
+  .bench{
+    display:grid; grid-template-columns:1fr auto 1fr; gap:0; align-items:center;
+    border:1px solid var(--line); border-radius:16px; overflow:hidden; margin-top:8px;
+    background:var(--paper-2); box-shadow:var(--shadow);
+  }
+  .bench .side{ padding:26px 24px; }
+  .bench .side.from{ background:var(--paper); }
+  .bench .side .tag{ font-family:var(--font-mono); font-size:11px; color:var(--ink-2); text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px; }
+  .bench .side h4{ margin:0 0 6px; font-size:17px; }
+  .bench .side p{ margin:0; font-size:13.5px; color:var(--ink-2); }
+  .bench .mid{ padding:0 18px; font-size:22px; color:var(--sky); }
+
+  /* ---------- module status ---------- */
+  .mod-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:12px; }
+  .mod{
+    border:1px solid var(--line); border-radius:12px; padding:14px 16px;
+    background:var(--paper-2);
+  }
+  .mod .num{ font-family:var(--font-mono); font-size:11px; color:var(--ink-2); }
+  .mod .name{ font-size:14px; font-weight:600; margin:4px 0 8px; }
+  .badge{
+    display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700;
+    padding:3px 9px; border-radius:20px; font-family:var(--font-mono);
+  }
+  .badge.done{ background:var(--mint-soft); color:var(--mint); }
+  .badge.extra{ background:var(--lavender); color:#fff; opacity:.85; }
+
+  /* ---------- pivot cases (core content) ---------- */
+  .case{
+    border:1px solid var(--line); border-radius:18px; background:var(--paper-2);
+    box-shadow:var(--shadow); margin-bottom:24px; overflow:hidden;
+  }
+  .case-head{
+    display:flex; align-items:baseline; justify-content:space-between; gap:16px;
+    padding:22px 26px 0;
+  }
+  .case-head .num{ font-family:var(--font-mono); color:var(--sky); font-size:13px; }
+  .case-head h3{ font-size:19px; margin:2px 0 18px; }
+  .flow{
+    display:flex; align-items:stretch; gap:0; margin:0 26px 20px;
+    border:1px solid var(--line); border-radius:12px; overflow:hidden;
+  }
+  .flow .plan, .flow .actual{ flex:1; padding:16px 18px; }
+  .flow .plan{ background:var(--coral-soft); }
+  .flow .actual{ background:var(--mint-soft); }
+  .flow .lab{ font-family:var(--font-mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; margin-bottom:6px; }
+  .flow .plan .lab{ color:var(--coral); }
+  .flow .actual .lab{ color:var(--mint); }
+  .flow .val{ font-size:14.5px; font-weight:600; }
+  .flow .arrow{
+    width:40px; flex:0 0 40px; display:flex; align-items:center; justify-content:center;
+    background:var(--paper-2); font-size:16px; color:var(--ink-2);
+  }
+  .why{
+    margin:0 26px 26px; padding:16px 18px; border-radius:10px;
+    background:var(--paper); border-left:3px solid var(--sky);
+    font-size:13.5px; color:var(--ink-2);
+  }
+  .why strong{ color:var(--ink); font-family:var(--font-mono); font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; display:block; margin-bottom:6px; }
+  .why ul{ margin:0; padding-left:18px; }
+  .why li{ margin:0 0 4px; }
+  .why li:last-child{ margin-bottom:0; }
+
+  /* ---------- media placeholder ---------- */
+  .media-slot{
+    margin:0 26px 20px; padding:22px; border-radius:12px;
+    border:1.5px dashed var(--line); color:var(--ink-2);
+    display:flex; align-items:center; gap:10px; font-size:12.5px;
+    font-family:var(--font-mono);
+  }
+  .media-slot .ic{ font-size:16px; }
+
+  /* ---------- stack table ---------- */
+  table.stack{ width:100%; border-collapse:collapse; font-size:13.5px; }
+  table.stack th{
+    text-align:left; font-family:var(--font-mono); font-size:11px; text-transform:uppercase;
+    letter-spacing:.06em; color:var(--ink-2); padding:0 14px 10px; border-bottom:1px solid var(--line);
+  }
+  table.stack td{ padding:12px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  table.stack tr:last-child td{ border-bottom:none; }
+  table.stack td.status{ font-family:var(--font-mono); font-size:11.5px; white-space:nowrap; }
+  .st-changed{ color:var(--coral); } .st-same{ color:var(--ink-2); }
+  .tw{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--paper-2); box-shadow:var(--shadow); }
+
+  /* ---------- closing ---------- */
+  .close-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:8px; }
+  .close-card{
+    border-radius:14px; padding:20px; color:#fff;
+  }
+  .close-card:nth-child(1){ background:linear-gradient(160deg, var(--coral), #c94f38); }
+  .close-card:nth-child(2){ background:linear-gradient(160deg, var(--lavender), #6c5fc4); }
+  .close-card:nth-child(3){ background:linear-gradient(160deg, var(--mint), #1f8d76); }
+  .close-card .n{ font-family:var(--font-mono); font-size:11px; opacity:.85; margin-bottom:8px; }
+  .close-card h4{ margin:0 0 6px; font-size:15.5px; }
+  .close-card p{ margin:0; font-size:12.5px; opacity:.92; }
+
+  /* ---------- effects / roadmap ---------- */
+  .split{ display:grid; grid-template-columns:1fr 1fr; gap:28px; }
+  .split-col .sub{ font-size:13px; font-weight:700; color:var(--ink); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+  .split-col .sub .sw{ width:8px; height:8px; border-radius:50%; }
+  .eff-list{ display:flex; flex-direction:column; gap:10px; }
+  .eff-item{
+    display:flex; gap:12px; align-items:flex-start;
+    background:var(--paper-2); border:1px solid var(--line); border-radius:12px;
+    padding:13px 15px; font-size:13.5px;
+  }
+  .eff-item .ic{ font-size:16px; flex-shrink:0; }
+  .eff-item b{ display:block; font-size:13.5px; margin-bottom:2px; }
+  .eff-item span.d{ color:var(--ink-2); font-size:12.5px; }
+
+  footer{ padding:50px 0 70px; text-align:center; color:var(--ink-2); font-size:12.5px; }
+
+  @media (max-width:720px){
+    .ov-grid{ grid-template-columns:1fr; }
+    .bench{ grid-template-columns:1fr; }
+    .bench .mid{ padding:10px 0; transform:rotate(90deg); }
+    .flow{ flex-direction:column; }
+    .flow .arrow{ width:100%; height:28px; transform:rotate(90deg); }
+    .close-grid{ grid-template-columns:1fr; }
+    .split{ grid-template-columns:1fr; }
+  }
+
+  :focus-visible{ outline:2px solid var(--sky); outline-offset:2px; }
+  @media (prefers-reduced-motion:reduce){ .rail-fill{ transition:none; } }
+</style>
+</head>
+<body>
+
+<div class="rail"><div class="rail-fill" id="railFill"></div></div>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span>모바일 프로그래밍 · 발표자료</div>
+    <h1>물친구 <span class="grow">WaterBuddy</span><br>기획은 이렇게, 구현은 이렇게</h1>
+    <p class="lede">기획 10모듈, 그중 실제로 바뀐 3가지와 그 이유.</p>
+    <div class="stage-strip">🌱<span class="arrow">bench →</span>🥚🐣🐤🐥🐔<span class="arrow">← 실제 성장 구현</span></div>
+    <div class="stage-cap">PLANT NANNY 벤치마킹 → 펫 육성 + 스트레칭 앱으로 재구성</div>
+  </div>
+</div>
+
+<section id="overview">
+  <div class="wrap">
+    <div class="kicker">01 · Overview</div>
+    <h2 class="head">무엇을 만들었나</h2>
+    <p class="section-lede"><strong>Plant Nanny</strong> 벤치마킹 → "식물" 대신 "펫 육성 + 스트레칭"의 <strong>물친구(WaterBuddy)</strong>.</p>
+
+    <div class="bench">
+      <div class="side from">
+        <div class="tag">Benchmark</div>
+        <h4>🌱 Plant Nanny</h4>
+        <p>물 마시면 식물이 자람. 원터치 기록 · 식물 수집 · 위젯 · 월별 통계.</p>
+      </div>
+      <div class="mid">→</div>
+      <div class="side">
+        <div class="tag">Our Take</div>
+        <h4>💧 WaterBuddy</h4>
+        <p>식물 대신 <strong>펫</strong>. 물 + 스트레칭 기록, 친구 랭킹, 아이템 꾸미기.</p>
+      </div>
+    </div>
+
+    <div class="media-slot" style="margin:22px 0 0; border-radius:14px;"><span class="ic">🎬</span>데모 영상 / 앱 스크린샷 자리</div>
+
+    <div class="ov-grid" style="margin-top:22px;">
+      <div class="ov-card"><div class="ic">📱</div><h3>화면 10개 기획</h3><p>기록 · 통계 · 캐릭터 · 스트레칭 · 랭킹 · 알림.</p></div>
+      <div class="ov-card"><div class="ic">🗄️</div><h3>Room DB 4테이블</h3><p>users / drink_records / characters / items.</p></div>
+      <div class="ov-card"><div class="ic">✅</div><h3>구현 검증 완료</h3><p>10개 모듈 전부 정상 동작 확인.</p></div>
+      <div class="ov-card"><div class="ic">🔀</div><h3>이번 발표의 초점</h3><p><strong>기획과 달라진 지점과 이유</strong>.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="modules">
+  <div class="wrap">
+    <div class="kicker">02 · Modules</div>
+    <h2 class="head">10개 기획 + 1개 추가, 총 11개 화면</h2>
+    <p class="section-lede">기획 화면 전부 구현 + 개발 편의용 화면 1개 추가.</p>
+    <div class="mod-grid">
+      <div class="mod"><div class="num">01</div><div class="name">Splash</div><span class="badge done">구현 ✔</span></div>
+      <div class="mod"><div class="num">02</div><div class="name">Onboarding</div><span class="badge done">구현 ✔</span></div>
+      <div class="mod"><div class="num">03</div><div class="name">Main</div><span class="badge done">구현 ✔</span></div>
+      <div class="mod"><div class="num">04</div><div class="name">Drink History</div><span class="badge done">구현 ✔</span></div>
+      <div class="mod"><div class="num">05</div><div class="name">Statistics</div><span class="badge done">구현 ✔</span></div>
+      <div class="mod"><div class="num">06</div><div class="name">Character</div><span class="badge done">구현 ✔</span></div>
+      <div class="mod"><div class="num">07</div><div class="name">Stretching</div><span class="badge done">구현 ✔</span></div>
+      <div class="mod"><div class="num">08</div><div class="name">Ranking</div><span class="badge done">구현 ✔</span></div>
+      <div class="mod"><div class="num">09</div><div class="name">Alarm Setting</div><span class="badge done">구현 ✔</span></div>
+      <div class="mod"><div class="num">10</div><div class="name">My Page</div><span class="badge done">구현 ✔</span></div>
+      <div class="mod"><div class="num">+1</div><div class="name">Login</div><span class="badge extra">계획 외 추가</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="pivots">
+  <div class="wrap">
+    <div class="kicker">03 · The Pivots</div>
+    <h2 class="head">원래 이렇게 하려다, 이렇게 바뀐 지점들</h2>
+    <p class="section-lede">기획과 갈라진 핵심 지점 세 가지.</p>
+
+    <div class="case">
+      <div class="case-head"><h3>🎩 캐릭터 꾸미기 — 아이템 장착에서 배경색으로</h3><span class="num">CASE 01</span></div>
+      <div class="flow">
+        <div class="plan"><div class="lab">원래 계획</div><div class="val">모자 · 선글라스 등을 이모지로 펫 위에 장착</div></div>
+        <div class="arrow">→</div>
+        <div class="actual"><div class="lab">실제 구현</div><div class="val">원형 배경을 단색 5종(하늘·코랄·민트·레몬·라벤더)으로 교체</div></div>
+      </div>
+      <div class="media-slot"><span class="ic">📷</span>비교 스크린샷 자리</div>
+      <div class="why"><strong>왜 바뀌었나</strong>
+        <ul>
+          <li>펫·성장 단계마다 이모지 구도가 제각각(정면 클로즈업 vs 옆모습 전신)이라 액세서리 좌표가 계속 어긋남</li>
+          <li>이모지는 위치 정보 없는 완성된 그림이라 근본적 한계 — 배경색으로 단순화</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="case">
+      <div class="case-head"><h3>🏆 랭킹 친구 추가 — 닉네임 검색에서 로컬 목업으로</h3><span class="num">CASE 02</span></div>
+      <div class="flow">
+        <div class="plan"><div class="lab">원래 계획</div><div class="val">닉네임 검색으로 다른 사용자를 친구 추가</div></div>
+        <div class="arrow">→</div>
+        <div class="actual"><div class="lab">실제 구현</div><div class="val">로컬 계정 + 목업 데이터로 랭킹 구성</div></div>
+      </div>
+      <div class="media-slot"><span class="ic">📷</span>랭킹 화면 스크린샷 자리</div>
+      <div class="why"><strong>왜 바뀌었나</strong>
+        <ul>
+          <li>서버 인증이 없는 로컬 전용 앱이라 검색할 대상(다른 사용자 데이터) 자체가 없음</li>
+          <li>추가 예정 기능 — 서버 연동 전까지 의도적 보류</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="case">
+      <div class="case-head"><h3>📈 통계 주간 그래프 — 꺾은선에서 막대로</h3><span class="num">CASE 03</span></div>
+      <div class="flow">
+        <div class="plan"><div class="lab">원래 계획</div><div class="val">일간 막대, 주간 꺾은선(라인) 그래프</div></div>
+        <div class="arrow">→</div>
+        <div class="actual"><div class="lab">실제 구현</div><div class="val">일간·주간 모두 막대 그래프(Canvas 자체 제작)</div></div>
+      </div>
+      <div class="media-slot"><span class="ic">📷</span>통계 화면 스크린샷 자리</div>
+      <div class="why"><strong>왜 바뀌었나</strong>
+        <ul>
+          <li>외부 라이브러리 없이 Canvas 뷰 <code>BarChartView</code> 하나만 만들어 재사용</li>
+          <li>라인 차트를 별도 구현하지 않아 주간도 막대로 표시</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stack">
+  <div class="wrap">
+    <div class="kicker">04 · Tech Stack</div>
+    <h2 class="head">기술 스택 — 계획과 실제</h2>
+    <p class="section-lede">사진 에셋 없이 이모지·색상으로 표현 → 이미지·애니메이션 스택이 자연스럽게 제외.</p>
+    <div class="tw">
+      <table class="stack">
+        <thead><tr><th>영역</th><th>기획</th><th>실제</th><th>상태</th><th>비고</th></tr></thead>
+        <tbody>
+          <tr><td>언어</td><td>Java</td><td>Kotlin</td><td class="status st-changed">변경</td><td>README 작성 이후 처음부터 Kotlin으로 시작</td></tr>
+          <tr><td>최소 SDK</td><td>API 26</td><td>API 29</td><td class="status st-changed">변경</td><td>개발 중 사용한 최신 API 호환을 위해 상향</td></tr>
+          <tr><td>차트</td><td>MPAndroidChart</td><td>자체 BarChartView</td><td class="status st-changed">대체</td><td>외부 라이브러리 의존 없이 Canvas로 직접 구현</td></tr>
+          <tr><td>이미지 로딩</td><td>Glide</td><td>미사용</td><td class="status st-changed">미구현</td><td>사진 에셋 없이 전부 이모지/색상으로 표현</td></tr>
+          <tr><td>애니메이션</td><td>Lottie</td><td>미사용</td><td class="status st-changed">미구현</td><td>펫 성장 단계 전환으로 대체</td></tr>
+          <tr><td>화면 전환</td><td>ViewPager2</td><td>미사용</td><td class="status st-changed">미구현</td><td>BottomNavigationView + Intent만으로 충분</td></tr>
+          <tr><td>알림</td><td>AlarmManager + NotificationCompat</td><td>동일</td><td class="status st-same">유지</td><td>-</td></tr>
+          <tr><td>UI 컴포넌트</td><td>RecyclerView / BottomNav / CardView</td><td>동일</td><td class="status st-same">유지</td><td>-</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="future">
+  <div class="wrap">
+    <div class="kicker">05 · Impact &amp; Next</div>
+    <h2 class="head">기대효과 &amp; 발전 방향</h2>
+    <p class="section-lede">지금 구조로 기대할 수 있는 효과와, 다음 단계로 넘길 개선 지점.</p>
+
+    <div class="split">
+      <div class="split-col">
+        <div class="sub"><span class="sw" style="background:var(--mint);"></span>기대효과</div>
+        <div class="eff-list">
+          <div class="eff-item"><span class="ic">🎮</span><div><b>습관 형성</b><span class="d">물 마시기 + 스트레칭을 한 앱에서 게이미피케이션으로 유도</span></div></div>
+          <div class="eff-item"><span class="ic">🏆</span><div><b>지속 사용 동기</b><span class="d">랭킹 · 아이템 구매로 장기 리텐션 확보</span></div></div>
+          <div class="eff-item"><span class="ic">🧪</span><div><b>빠른 테스트/시연</b><span class="d">로컬 멀티 계정으로 기기 하나에서 여러 케이스 확인</span></div></div>
+        </div>
+      </div>
+      <div class="split-col">
+        <div class="sub"><span class="sw" style="background:var(--coral);"></span>발전시킬 점</div>
+        <div class="eff-list">
+          <div class="eff-item"><span class="ic">🌐</span><div><b>서버 연동</b><span class="d">실제 친구 검색 · 추가 기능 구현</span></div></div>
+          <div class="eff-item"><span class="ic">🎨</span><div><b>이미지 에셋 도입</b><span class="d">확보 후 아이템 장착 방식 재검토</span></div></div>
+          <div class="eff-item"><span class="ic">📊</span><div><b>통계 다양화</b><span class="d">라인 차트 등 시각화 옵션 추가</span></div></div>
+          <div class="eff-item"><span class="ic">🔔</span><div><b>세부 마감</b><span class="d">아이템 가격 정상화, 알림음 실제 반영</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="close">
+  <div class="wrap">
+    <div class="kicker">06 · Summary</div>
+    <h2 class="head">정리</h2>
+    <p class="section-lede">10개 모듈 전부 정상 작동. 기획과 달라진 지점은 세 가지.</p>
+    <div class="close-grid">
+      <div class="close-card"><div class="n">CASE 01</div><h4>캐릭터 꾸미기</h4><p>아이템 장착 → 배경 색상. 이모지 좌표 정렬의 근본적 한계 때문.</p></div>
+      <div class="close-card"><div class="n">CASE 02</div><h4>랭킹 친구 추가</h4><p>닉네임 검색 → 로컬 계정 + 목업. 서버 없는 구조상 검색 대상이 없음.</p></div>
+      <div class="close-card"><div class="n">CASE 03</div><h4>주간 통계 그래프</h4><p>꺾은선 → 막대. 자체 제작 차트 뷰 하나로 통일했기 때문.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>WaterBuddy · 모바일 프로그래밍 프로젝트 · 기획 대비 구현 현황 발표자료</footer>
+
+<script>
+  const fill = document.getElementById('railFill');
+  function updateRail(){
+    const h = document.documentElement;
+    const scrolled = h.scrollTop || document.body.scrollTop;
+    const max = (h.scrollHeight || document.body.scrollHeight) - h.clientHeight;
+    const pct = max > 0 ? (scrolled / max) * 100 : 0;
+    fill.style.width = pct + '%';
+  }
+  document.addEventListener('scroll', updateRail, { passive:true });
+  updateRail();
+</script>
+</body>
+</html>
